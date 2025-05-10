@@ -1,0 +1,61 @@
+# Minimal Demo Example of how the templates.yml of LiteBans could look like
+# if you want to use LiteBans-TemplateStack to combine multiple punishment types
+# for more information on how LiteBans templates work, consult https://gitlab.com/ruany/LiteBans/-/wikis/Templates
+
+ban-templates:
+  Spam:
+    reason: 'Spam'
+    message: 'You have been banned for spamming!'
+    permission: litebans.group.spam
+    ladder:
+      third:
+        duration: 3h
+      second:
+        duration: 2h
+      first:
+        duration: 1h
+    expire_ladder: 90d
+    ip_template: false
+
+mute-templates:
+  Spam:
+    reason: 'Spam'
+    message: 'You have been muted for spamming!'
+    permission: litebans.group.spam
+    ladder:
+      third:
+        duration: 3h
+      second:
+        duration: 2h
+      first:
+        duration: 1h
+    expire_ladder: 30d
+    ip_template: false
+
+warn-templates:
+  Spam:
+    reason: 'Spam'
+    message: 'You have been warned for spamming!'
+    permission: litebans.group.spam
+    ladder:
+      second:
+        message: '&4You should really stop. &eThis warn should not happen.. '
+      first:
+        message: '&cPlease stop spamming!\nThis is your first and only warning. If you do this again, you will be muted.'
+    expire_ladder: 30d
+    ip_template: false
+
+kick-templates:
+  Spam:
+    reason: 'Spam'
+    message: 'You have been kicked for spamming!'
+    permission: litebans.group.spam
+    ladder:
+      second:
+        message: '&4You should really stop.'
+      first:
+        message: '&cPlease stop spamming!\nIf you do this again, you will be muted.'
+    expire_ladder: 30d
+    ip_template: false
+
+template-groups: {}
