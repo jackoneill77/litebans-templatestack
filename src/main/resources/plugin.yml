@@ -1,0 +1,9 @@
+name: LiteBans-TemplateStack
+version: '1.0-SNAPSHOT'
+main: xyz.jackoneill.litebans.templatestack.TemplateStackPlugin
+api-version: '1.20'
+authors: [ Jack O'Neill ]
+website: https://jackoneill.xyz
+
+softdepend:
+  - LiteBans

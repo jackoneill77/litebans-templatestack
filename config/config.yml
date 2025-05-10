@@ -1,0 +1,36 @@
+debug: false
+command_alias:
+  - templatestack
+  - banmutekickwarn
+defaults:
+  expiration_days: 30
+  punishments: 1
+template_stacks:
+  Spam:
+    enabled: true
+    expiration_days: 90
+    templates:
+      ban:
+        template: 'Spam'
+        enabled: true
+      mute:
+        template: 'Spam'
+        enabled: true
+        punishments: 4
+      kick:
+        template: 'Spam'
+        enabled: true
+        punishments: 2
+      warn:
+        template: 'Spam'
+        enabled: true
+        punishments: 1
+  KickBan:
+    templates:
+      ban:
+        template: 'KickBan'
+        enabled: true
+      kick:
+        template: 'KickBan'
+        enabled: false
+        punishments: 2
