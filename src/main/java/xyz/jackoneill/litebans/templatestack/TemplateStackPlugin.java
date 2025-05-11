@@ -3,11 +3,13 @@ package xyz.jackoneill.litebans.templatestack;
 import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.jackoneill.litebans.templatestack.commands.TemplateStackCommand;
 import xyz.jackoneill.litebans.templatestack.model.TemplateStack;
 import xyz.jackoneill.litebans.templatestack.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class TemplateStackPlugin extends JavaPlugin {
@@ -81,5 +83,15 @@ public final class TemplateStackPlugin extends JavaPlugin {
             Log.debug("Loaded TemplateStacks = " + stacks);
             commandManager.getCommandCompletions().registerCompletion("stacks", c -> stacks);
         }
+
+        commandManager.getCommandCompletions().registerAsyncCompletion("offlineplayers", c -> {
+            List<String> names = new ArrayList<>();
+            for (OfflinePlayer p : getServer().getOfflinePlayers()) {
+                if (p.getName() != null) {
+                    names.add(p.getName());
+                }
+            }
+            return names;
+        });
     }
 }

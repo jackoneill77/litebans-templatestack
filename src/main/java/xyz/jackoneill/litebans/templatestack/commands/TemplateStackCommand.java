@@ -3,9 +3,11 @@ package xyz.jackoneill.litebans.templatestack.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import xyz.jackoneill.litebans.templatestack.TemplateStackPlugin;
 import xyz.jackoneill.litebans.templatestack.model.TemplateStack;
+import xyz.jackoneill.litebans.templatestack.util.Chat;
 
 @CommandAlias("%alias")
 public class TemplateStackCommand extends BaseCommand {
@@ -19,7 +21,7 @@ public class TemplateStackCommand extends BaseCommand {
     @HelpCommand
     @CommandPermission("litebans.templatestack")
     public static void onHelp(CommandSender sender, CommandHelp help) {
-        sender.sendMessage("&e&lTemplateStack Help");
+        Chat.msg(sender, "&e&lTemplateStack Help");
         help.showHelp();
     }
 
@@ -28,12 +30,30 @@ public class TemplateStackCommand extends BaseCommand {
     @Description("Shows Details of available Template Stacks")
     @CommandCompletion("@stacks")
     public void onInfo(CommandSender sender, String templateStack) {
+        Chat.msg(sender, "", "TemplateStack Info for &e" + templateStack);
         TemplateStack stack = this.plugin.getLiteBansConfig().getStackByName(templateStack);
         if (stack != null) {
-            sender.sendMessage(stack.getInfo().toArray(new String[0]));
+            Chat.msg(sender, stack.getInfo().toArray(new String[0]));
         } else {
-            sender.sendMessage("TemplateStack " + templateStack + " does not exist");
+            Chat.msg(sender, "&cTemplateStack " + templateStack + " does not exist");
         }
+        Chat.msg(sender, "");
+    }
+
+    @Subcommand("check")
+    @CommandPermission("litebans.templatestack.check")
+    @Description("Checks where the player in the current punishment ladder is")
+    @CommandCompletion("@offlineplayers @stacks")
+    public void onPlayerInfo(CommandSender sender, OfflinePlayer player, String templateStack) {
+        Chat.msg(sender, "\nPlayerCheck Info for &e" + player.getName() + "&f on &e" + templateStack);
+        TemplateStack stack = this.plugin.getLiteBansConfig().getStackByName(templateStack);
+
+        if (stack != null) {
+            Chat.msg(sender, "TODO");
+        } else {
+            Chat.msg(sender, "&cTemplateStack &e" + templateStack + " does not exist");
+        }
+        Chat.msg(sender, "");
     }
 
     @Subcommand("reload")
@@ -43,9 +63,9 @@ public class TemplateStackCommand extends BaseCommand {
         this.plugin.reloadPlugin();
 
         if (this.plugin.getLiteBansConfig().isValid()) {
-            sender.sendMessage("Configuration successfully reloaded");
+            Chat.msg(sender, "&aConfiguration successfully reloaded");
         } else {
-            sender.sendMessage("Configuration invalid. Check logs, fix and reload again.");
+            Chat.msg(sender, "&cConfiguration invalid. Check logs, fix and reload again.");
         }
     }
 }
