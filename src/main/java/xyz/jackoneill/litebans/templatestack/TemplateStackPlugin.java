@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitWorker;
 import xyz.jackoneill.litebans.templatestack.commands.TemplateStackCommand;
 import xyz.jackoneill.litebans.templatestack.model.TemplateStack;
 import xyz.jackoneill.litebans.templatestack.util.Log;
@@ -15,11 +16,16 @@ import java.util.List;
 public final class TemplateStackPlugin extends JavaPlugin {
 
     @Getter
-    private LiteBansConfig liteBansConfig;
+    private static TemplateStackPlugin instance;
+
+    @Getter
+    private LiteBansManager liteBansManager;
+
     private PaperCommandManager commandManager;
 
     @Override
     public void onEnable() {
+        instance = this;
         Log.set(getLogger());
 
         getConfig().options().copyDefaults();
@@ -33,18 +39,43 @@ public final class TemplateStackPlugin extends JavaPlugin {
             return;
         }
 
-        liteBansConfig = new LiteBansConfig(this);
+
+        liteBansManager = new LiteBansManager(this);
+
         this.loadLiteBansConfigAndLogResults();
         this.registerCommands();
 
         Log.info("initialized");
     }
 
+    @Override
+    public void onDisable() {
+        // Wait up to 5 seconds for our async tasks to complete
+        for (int i = 0; i < 50; ++i) {
+            List<BukkitWorker> workers = Bukkit.getScheduler().getActiveWorkers();
+            boolean taskFound = false;
+
+            for (BukkitWorker worker : workers) {
+                if (worker.getOwner().equals(this)) {
+                    taskFound = true;
+                    break;
+                }
+            }
+
+            if (!taskFound) break;
+
+            try {
+                Thread.sleep(100); // msec
+            } catch (InterruptedException ignored) {
+            }
+        }
+    }
+
     private void loadLiteBansConfigAndLogResults() {
-        this.liteBansConfig.load();
-        if (this.liteBansConfig.isValid()) {
+        this.liteBansManager.loadConfig();
+        if (this.liteBansManager.getConfig().isValid()) {
             Log.info("Configuration is valid.");
-            this.liteBansConfig.logConsole();
+            this.liteBansManager.getConfig().logConsole();
         } else {
             Log.error("Configuration appears to be invalid. Check preceding log messages for details.");
         }
@@ -78,8 +109,8 @@ public final class TemplateStackPlugin extends JavaPlugin {
     }
 
     private void registerCommandCompletions() {
-        if (this.liteBansConfig.isValid()) {
-            List<String> stacks = this.liteBansConfig.getTemplateStacks().stream().map(TemplateStack::getName).toList();
+        if (this.liteBansManager.getConfig().isValid()) {
+            List<String> stacks = this.liteBansManager.getConfig().getTemplateStacks().stream().map(TemplateStack::getName).toList();
             Log.debug("Loaded TemplateStacks = " + stacks);
             commandManager.getCommandCompletions().registerCompletion("stacks", c -> stacks);
         }

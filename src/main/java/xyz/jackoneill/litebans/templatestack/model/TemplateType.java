@@ -10,4 +10,13 @@ public enum TemplateType {
     public String toString() {
         return name().toLowerCase();
     }
+
+    public String getTableName() {
+        return switch (this) {
+            case BAN -> "{bans}";
+            case MUTE -> "{mutes}";
+            case KICK -> "{kicks}";
+            case WARN -> "{warnings}";
+        };
+    }
 }

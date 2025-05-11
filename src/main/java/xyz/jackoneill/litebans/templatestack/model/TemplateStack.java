@@ -1,12 +1,12 @@
 package xyz.jackoneill.litebans.templatestack.model;
 
 import lombok.Getter;
-import lombok.Setter;
+import org.bukkit.OfflinePlayer;
+import xyz.jackoneill.litebans.templatestack.LiteBansManager;
+import xyz.jackoneill.litebans.templatestack.TemplateStackPlugin;
 import xyz.jackoneill.litebans.templatestack.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Getter
@@ -14,18 +14,37 @@ public class TemplateStack {
     private final String name;
     private final int expirationDays;
 
-    @Setter
     private Template banTemplate = null;
-    @Setter
     private Template muteTemplate = null;
-    @Setter
     private Template kickTemplate = null;
-    @Setter
     private Template warnTemplate = null;
 
     public TemplateStack(String name, int expirationDays) {
         this.name = name;
         this.expirationDays = expirationDays;
+    }
+
+    public void setBanTemplate(Template template) {
+        this.banTemplate = applyExpirationDay(template);
+    }
+
+    public void setMuteTemplate(Template template) {
+        this.muteTemplate = applyExpirationDay(template);
+    }
+
+    public void setKickTemplate(Template template) {
+        this.kickTemplate = applyExpirationDay(template);
+    }
+
+    public void setWarnTemplate(Template template) {
+        this.warnTemplate = applyExpirationDay(template);
+    }
+
+    private Template applyExpirationDay(Template template) {
+        if (template != null) {
+            template.setExpirationDays(this.expirationDays);
+        }
+        return template;
     }
 
     public boolean hasBanTemplate() {
@@ -48,15 +67,14 @@ public class TemplateStack {
         return (this.hasBanTemplate() || this.hasKickTemplate() || this.hasMuteTemplate() || this.hasWarnTemplate());
     }
 
-    @Override
-    public String toString() {
-        return "TemplateStack(" + this.name
-                + "): expirationDays=" + this.expirationDays
-                + " templates=" + this.getTemplateCount();
-    }
-
     public int getTemplateCount() {
         return (int) Stream.of(this.banTemplate, this.muteTemplate, this.warnTemplate, this.kickTemplate).filter(Objects::nonNull).count();
+    }
+
+    @Override
+    public String toString() {
+        return this.name + ": expirationDays=" + this.expirationDays
+                + ",templates=" + this.getTemplateCount();
     }
 
     public void logConsole() {
@@ -74,5 +92,15 @@ public class TemplateStack {
                 .map(Template::toString)
                 .forEach(output::add);
         return output;
+    }
+
+    public Map<Template, List<Punishment>> getAllPunishments(OfflinePlayer player) {
+        Map<Template, List<Punishment>> punishmentMap = new LinkedHashMap<>();
+        LiteBansManager manager = TemplateStackPlugin.getInstance().getLiteBansManager();
+
+        Stream.of(banTemplate, muteTemplate, kickTemplate, warnTemplate)
+                .filter(Objects::nonNull)
+                .forEach(t -> punishmentMap.put(t, manager.getActiveLadderPunishments(player, t)));
+        return punishmentMap;
     }
 }
