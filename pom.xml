@@ -58,6 +58,14 @@
                             <shadedPattern>xyz.jackoneill.litebans.templatestack.locales</shadedPattern>
                         </relocation>
                     </relocations>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.MF</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
                 <executions>
                     <execution>
