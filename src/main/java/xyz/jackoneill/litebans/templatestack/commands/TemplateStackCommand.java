@@ -15,6 +15,7 @@ import xyz.jackoneill.litebans.templatestack.util.Chat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @CommandAlias("%alias")
 public class TemplateStackCommand extends BaseCommand {
@@ -30,6 +31,20 @@ public class TemplateStackCommand extends BaseCommand {
     public static void onHelp(CommandSender sender, CommandHelp help) {
         Chat.msg(sender, "&e&lTemplateStack Help");
         help.showHelp();
+    }
+
+    @Subcommand("list")
+    @CommandPermission("litebans.templatestack.info")
+    @Description("Lists all loaded Template Stacks")
+    public void onList(CommandSender sender) {
+
+        if(this.plugin.getLiteBansManager().getConfig().getTemplateStacks().isEmpty()) {
+            Chat.msg(sender, "&4&lNo Template Stacks Available");
+            return;
+        }
+
+        String stackList = this.plugin.getLiteBansManager().getConfig().getTemplateStacks().stream().map(TemplateStack::getName).collect(Collectors.joining(", "));
+        Chat.msg(sender, "", "&e&lAvailable TemplateStacks", "---------------------------", stackList, "");
     }
 
     @Subcommand("info")
