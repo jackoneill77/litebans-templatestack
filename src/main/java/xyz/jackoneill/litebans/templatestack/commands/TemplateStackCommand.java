@@ -28,17 +28,18 @@ public class TemplateStackCommand extends BaseCommand {
 
     @HelpCommand
     @CommandPermission("litebans.templatestack")
-    public static void onHelp(CommandSender sender, CommandHelp help) {
+    @Description("Lists all available commands")
+    public static void onHelp(CommandSender sender, @Name("subcommand") CommandHelp help) {
         Chat.msg(sender, "&e&lTemplateStack Help");
         help.showHelp();
     }
 
     @Subcommand("list")
-    @CommandPermission("litebans.templatestack.info")
-    @Description("Lists all loaded Template Stacks")
+    @CommandPermission("litebans.templatestack")
+    @Description("Lists all loaded TemplateStacks")
     public void onList(CommandSender sender) {
 
-        if(this.plugin.getLiteBansManager().getConfig().getTemplateStacks().isEmpty()) {
+        if (this.plugin.getLiteBansManager().getConfig().getTemplateStacks().isEmpty()) {
             Chat.msg(sender, "&4&lNo Template Stacks Available");
             return;
         }
@@ -48,10 +49,10 @@ public class TemplateStackCommand extends BaseCommand {
     }
 
     @Subcommand("info")
-    @CommandPermission("litebans.templatestack.info")
-    @Description("Shows Details of available Template Stacks")
+    @CommandPermission("litebans.templatestack")
+    @Description("Shows Details of a TemplateStack")
     @CommandCompletion("@stacks")
-    public void onInfo(CommandSender sender, String templateStack) {
+    public void onInfo(CommandSender sender, @Name("template") String templateStack) {
         Chat.msg(sender, "", "&e&lTemplateStack Info for &6" + templateStack,
                 "---------------------------");
         TemplateStack stack = this.plugin.getLiteBansManager().getConfig().getStackByName(templateStack);
@@ -67,9 +68,9 @@ public class TemplateStackCommand extends BaseCommand {
     @CommandPermission("litebans.templatestack.check")
     @Description("Checks where the player in the current punishment ladder is")
     @CommandCompletion("@offlineplayers @stacks")
-    public void onPlayerInfo(CommandSender sender, OfflinePlayer player, String templateStack) {
-        Chat.msg(sender, "\n&e&lPlayerCheck Info for &6&l" + player.getName() + "&e&l on Ladder &6&l" + templateStack,
-                "--------------------------------");
+    public void onPlayerInfo(CommandSender sender, @Name("player") OfflinePlayer player, @Name("template") String templateStack) {
+        Chat.msg(sender, "\n&e&lPlayer Check for &6&l" + player.getName()
+                + "&e&l on Ladder &6&l" + templateStack, "--------------------------------");
         TemplateStack stack = this.plugin.getLiteBansManager().getConfig().getStackByName(templateStack);
 
         if (stack != null) {
@@ -85,6 +86,14 @@ public class TemplateStackCommand extends BaseCommand {
                     for (Punishment p : entry.getValue()) {
                         messages.add("» " + p.getTimeString() + ": " + p.getReason() + " &b(by " + p.getBannedBy() + ")");
                     }
+                }
+                messages.add("");
+
+                Template nextPunishment = stack.getNextPunishment(punishments);
+                if (nextPunishment != null) {
+                    messages.add("Next Punishment: &e" + nextPunishment.getType().toString() + ": " + nextPunishment.getTemplate());
+                } else {
+                    messages.add("Next Punishment: &4Error - No Template found");
                 }
                 messages.add("");
 

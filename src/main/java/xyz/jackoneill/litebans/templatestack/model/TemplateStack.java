@@ -2,6 +2,7 @@ package xyz.jackoneill.litebans.templatestack.model;
 
 import lombok.Getter;
 import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.Nullable;
 import xyz.jackoneill.litebans.templatestack.LiteBansManager;
 import xyz.jackoneill.litebans.templatestack.TemplateStackPlugin;
 import xyz.jackoneill.litebans.templatestack.util.Log;
@@ -102,5 +103,36 @@ public class TemplateStack {
                 .filter(Objects::nonNull)
                 .forEach(t -> punishmentMap.put(t, manager.getActiveLadderPunishments(player, t)));
         return punishmentMap;
+    }
+
+    public @Nullable Template getNextPunishment(Map<Template, List<Punishment>> playerPunishments) {
+        Template previousIterationPunishment = null;
+
+        Template lastOrderPunishment = null;
+        Template selectedTemplate = null;
+
+        for (Map.Entry<Template, List<Punishment>> entry : playerPunishments.entrySet()) {
+            lastOrderPunishment = entry.getKey();
+            if (!entry.getValue().isEmpty()) {
+                // there are already punishments in this template
+                if (entry.getValue().size() < entry.getKey().getPunishments() || entry.getKey().getPunishments() == -1) {
+                    // template accepts more punishments, or template is last = infinite punishments
+                    selectedTemplate = entry.getKey();
+                }
+                if (entry.getValue().size() >= entry.getKey().getPunishments()) {
+                    // template has reach its limit, use previous template (should be set by previous iteration)
+                    selectedTemplate = previousIterationPunishment;
+                }
+            }
+            if (selectedTemplate != null) {
+                break;
+            }
+            previousIterationPunishment = entry.getKey();
+        }
+
+        if (selectedTemplate == null) {
+            selectedTemplate = lastOrderPunishment;
+        }
+        return selectedTemplate;
     }
 }

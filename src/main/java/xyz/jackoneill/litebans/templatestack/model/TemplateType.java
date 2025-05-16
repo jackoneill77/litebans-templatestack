@@ -19,4 +19,13 @@ public enum TemplateType {
             case WARN -> "{warnings}";
         };
     }
+
+    public String getPastTense() {
+        return switch (this) {
+            case BAN -> "banned";
+            case MUTE -> "muted";
+            case KICK -> "kicked";
+            case WARN -> "warned";
+        };
+    }
 }
