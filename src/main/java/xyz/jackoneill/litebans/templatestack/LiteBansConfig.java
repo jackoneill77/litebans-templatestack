@@ -15,6 +15,7 @@ import xyz.jackoneill.litebans.templatestack.util.Log;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 public class LiteBansConfig {
@@ -104,6 +105,17 @@ public class LiteBansConfig {
             stack.setMuteTemplate(this.getTemplate(TemplateType.MUTE, templatesConfig, defaultPunishments, currentStackName));
             stack.setKickTemplate(this.getTemplate(TemplateType.KICK, templatesConfig, defaultPunishments, currentStackName));
             stack.setWarnTemplate(this.getTemplate(TemplateType.WARN, templatesConfig, defaultPunishments, currentStackName));
+
+            Stream.of(stack.getBanTemplate(), stack.getMuteTemplate(), stack.getKickTemplate(), stack.getWarnTemplate())
+                    .filter(Objects::nonNull)
+                    .findFirst()
+                    .ifPresent(template -> {
+                        if(template.getPunishments() > -1) {
+                            Log.debug("Top-most template " + template.getType() + ":" + template.getTemplate() + " in " + stack.getName() + " will use infinite number of punishments");
+                            template.setPunishments(-1);
+                        }
+                    });
+
             if (stack.hasAtLeastOneTemplate()) {
                 this.templateStacks.add(stack);
             } else {
