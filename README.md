@@ -1,17 +1,18 @@
 # LiteBans-TemplateStack
 
-**LiteBans-TemplateStack** is an extension to the [LiteBans](https://www.spigotmc.org/resources/litebans.3715/) plugin made by Ruan. It allows combining ladder templates from multiple punishment types (ban, mute, kick, warn) into one simple template by using the LiteBans API.
+**LiteBans-TemplateStack** is an extension to the [LiteBans](https://www.spigotmc.org/resources/litebans.3715/) plugin made by Ruan for **Spigot/Paper** servers. It allows combining ladder templates from multiple punishment types (ban, mute, kick, warn) into one simple template by using the LiteBans API.
 This allows using one single command to be used to issuing different punishments depending on where the player on the punishment ladder is.
 
 A **TemplateStack** is defined as a group of _at least_ one punishment template. Templates of all four types (warn, kick, mute, ban) can be combined. 
 
 *Note:* How a punishment looks like and which permissions are required to execute it will be handled by LiteBans itself, the TemplateStack-plugin does not overwrite that behaviour!
 
+*Note2:* Altough LiteBans supports multiple platforms (Spigot, Folia, Fabric, Bungee, Velocity), this extension currently only runs on **Spigot**.
 ## Requirements
 
 * This plugin required LiteBans to be installed. Get it on [spigotmc.org](https://www.spigotmc.org/resources/litebans.3715/).
 * This plugin was tested with 
-  * Minecraft `1.20.4` (should also work with newer versions)
+  * Minecraft Spigot / Paper `1.20.4` (should also work with newer versions)
   * LiteBans `2.16.4`
 
 
