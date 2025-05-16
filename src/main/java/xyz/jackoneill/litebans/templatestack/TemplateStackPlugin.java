@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitWorker;
+import xyz.jackoneill.litebans.templatestack.commands.BanPlusCommand;
 import xyz.jackoneill.litebans.templatestack.commands.TemplateStackCommand;
 import xyz.jackoneill.litebans.templatestack.model.TemplateStack;
 import xyz.jackoneill.litebans.templatestack.util.Log;
@@ -92,19 +93,28 @@ public final class TemplateStackPlugin extends JavaPlugin {
         commandManager = new PaperCommandManager(this);
         commandManager.enableUnstableAPI("help");
 
-        List<String> templateStackCommands = getConfig().getStringList("command_alias");
-        if (templateStackCommands.isEmpty()) {
-            templateStackCommands.add("templatestack");
+        List<String> banPlusCommands = getConfig().getStringList("command_alias");
+        if (banPlusCommands.isEmpty()) {
+            banPlusCommands.add("banplus");
         }
+        List<String> templateStackCommands = List.of("templatestack");
+
+        StringBuilder banPlusCommandArgs = new StringBuilder();
+        for (String command : banPlusCommands) banPlusCommandArgs.append(command).append("|");
+        banPlusCommandArgs = new StringBuilder(banPlusCommandArgs.substring(0, banPlusCommandArgs.length() - 1));
 
         StringBuilder templateStackCommandArgs = new StringBuilder();
         for (String command : templateStackCommands) templateStackCommandArgs.append(command).append("|");
         templateStackCommandArgs = new StringBuilder(templateStackCommandArgs.substring(0, templateStackCommandArgs.length() - 1));
 
         String commandAlias = templateStackCommandArgs.toString();
+        String banPlusCommandAlias = banPlusCommandArgs.toString();
         Log.debug("Registering command at " + commandAlias);
+        Log.debug("Registering command at " + banPlusCommandAlias);
         commandManager.getCommandReplacements().addReplacements("alias", commandAlias);
+        commandManager.getCommandReplacements().addReplacements("banPlusAlias", banPlusCommandAlias);
         commandManager.registerCommand(new TemplateStackCommand(this));
+        commandManager.registerCommand(new BanPlusCommand(this));
         this.registerCommandCompletions();
     }
 

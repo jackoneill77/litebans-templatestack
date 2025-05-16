@@ -1,7 +1,9 @@
 debug: false
 command_alias:
-  - templatestack
-  - banmutekickwarn
+  - banplus
+  - muteplus
+  - kickplus
+  - warnplus
 defaults:
   expiration_days: 30
   punishments: 1
