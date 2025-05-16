@@ -41,14 +41,12 @@ public final class TemplateStackPlugin extends JavaPlugin {
             return;
         }
 
-
         liteBansManager = new LiteBansManager(this);
 
         this.loadLiteBansConfigAndLogResults();
         this.registerCommands();
 
-        final int pluginId = 25875;
-        Metrics metrics = new Metrics(this, pluginId);
+        Metrics metrics = new Metrics(this, 25875);
         Log.info("initialized");
     }
 
@@ -69,7 +67,7 @@ public final class TemplateStackPlugin extends JavaPlugin {
             if (!taskFound) break;
 
             try {
-                Thread.sleep(100); // msec
+                Thread.sleep(100);
             } catch (InterruptedException ignored) {
             }
         }

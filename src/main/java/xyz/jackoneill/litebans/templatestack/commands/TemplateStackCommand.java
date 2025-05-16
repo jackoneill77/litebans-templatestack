@@ -65,7 +65,7 @@ public class TemplateStackCommand extends BaseCommand {
     }
 
     @Subcommand("check")
-    @CommandPermission("litebans.templatestack.check")
+    @CommandPermission("litebans.templatestack.punish")
     @Description("Checks where the player in the current punishment ladder is")
     @CommandCompletion("@offlineplayers @stacks")
     public void onPlayerInfo(CommandSender sender, @Name("player") OfflinePlayer player, @Name("template") String templateStack) {
@@ -78,7 +78,6 @@ public class TemplateStackCommand extends BaseCommand {
             Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
 
                 Map<Template, List<Punishment>> punishments = stack.getAllPunishments(player);
-
                 List<String> messages = new ArrayList<>();
 
                 for (Map.Entry<Template, List<Punishment>> entry : punishments.entrySet()) {
