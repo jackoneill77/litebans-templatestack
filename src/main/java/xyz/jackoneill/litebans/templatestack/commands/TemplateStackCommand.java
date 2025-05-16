@@ -4,6 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import xyz.jackoneill.litebans.templatestack.TemplateStackPlugin;
@@ -30,7 +31,7 @@ public class TemplateStackCommand extends BaseCommand {
     @CommandPermission("litebans.templatestack")
     @Description("Lists all available commands")
     public static void onHelp(CommandSender sender, @Name("subcommand") CommandHelp help) {
-        Chat.msg(sender, "&e&lTemplateStack Help");
+        Chat.msg(sender, ChatColor.YELLOW + "" + ChatColor.BOLD + "TemplateStack Help");
         help.showHelp();
     }
 
@@ -40,12 +41,17 @@ public class TemplateStackCommand extends BaseCommand {
     public void onList(CommandSender sender) {
 
         if (this.plugin.getLiteBansManager().getConfig().getTemplateStacks().isEmpty()) {
-            Chat.msg(sender, "&4&lNo Template Stacks Available");
+            Chat.msg(sender, ChatColor.RED + "No valid TemplateStacks available");
             return;
         }
 
         String stackList = this.plugin.getLiteBansManager().getConfig().getTemplateStacks().stream().map(TemplateStack::getName).collect(Collectors.joining(", "));
-        Chat.msg(sender, "", "&e&lAvailable TemplateStacks", "---------------------------", stackList, "");
+        Chat.msg(sender,
+                "",
+                ChatColor.YELLOW + "" + ChatColor.BOLD + "Available TemplateStacks",
+                "---------------------------",
+                stackList,
+                "");
     }
 
     @Subcommand("info")
@@ -53,13 +59,15 @@ public class TemplateStackCommand extends BaseCommand {
     @Description("Shows Details of a TemplateStack")
     @CommandCompletion("@stacks")
     public void onInfo(CommandSender sender, @Name("template") String templateStack) {
-        Chat.msg(sender, "", "&e&lTemplateStack Info for &6" + templateStack,
-                "---------------------------");
+
         TemplateStack stack = this.plugin.getLiteBansManager().getConfig().getStackByName(templateStack);
         if (stack != null) {
+            Chat.msg(sender, "",
+                    ChatColor.YELLOW + "" + ChatColor.BOLD + "TemplateStack Info for " + ChatColor.GOLD + templateStack,
+                    "---------------------------");
             Chat.msg(sender, stack.getInfo().toArray(new String[0]));
         } else {
-            Chat.msg(sender, "&cTemplateStack " + templateStack + " does not exist");
+            Chat.msg(sender, ChatColor.RED + "TemplateStack " + templateStack + " does not exist");
         }
         Chat.msg(sender, "");
     }
@@ -69,19 +77,22 @@ public class TemplateStackCommand extends BaseCommand {
     @Description("Checks where the player in the current punishment ladder is")
     @CommandCompletion("@offlineplayers @stacks")
     public void onPlayerInfo(CommandSender sender, @Name("player") OfflinePlayer player, @Name("template") String templateStack) {
-        Chat.msg(sender, "\n&e&lPlayer Check for &6&l" + player.getName()
-                + "&e&l on Ladder &6&l" + templateStack, "--------------------------------");
+
         TemplateStack stack = this.plugin.getLiteBansManager().getConfig().getStackByName(templateStack);
-
         if (stack != null) {
-
             Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
 
                 Map<Template, List<Punishment>> punishments = stack.getAllPunishments(player);
                 List<String> messages = new ArrayList<>();
+                messages.add("");
+                messages.add(ChatColor.YELLOW + "" + ChatColor.BOLD + "Player Check for "
+                        + ChatColor.GOLD + ChatColor.BOLD + player.getName()
+                        + ChatColor.YELLOW + ChatColor.BOLD + " on Ladder "
+                        + ChatColor.GOLD + ChatColor.BOLD + templateStack);
+                messages.add("--------------------------------");
 
                 for (Map.Entry<Template, List<Punishment>> entry : punishments.entrySet()) {
-                    messages.add("&e" + entry.getKey().getType().toString() + ": " + entry.getKey().getTemplate() + " &o(" + entry.getValue().size() + " punishments)");
+                    messages.add(ChatColor.YELLOW + entry.getKey().getType().toString() + ": " + entry.getKey().getTemplate() + ChatColor.ITALIC + " (" + entry.getValue().size() + " punishments)");
                     for (Punishment p : entry.getValue()) {
                         messages.add("» " + p.getTimeString() + ": " + p.getReason() + " &b(by " + p.getBannedBy() + ")");
                     }
@@ -90,9 +101,9 @@ public class TemplateStackCommand extends BaseCommand {
 
                 Template nextPunishment = stack.getNextPunishment(punishments);
                 if (nextPunishment != null) {
-                    messages.add("Next Punishment: &e" + nextPunishment.getType().toString() + ": " + nextPunishment.getTemplate());
+                    messages.add("Next Punishment: " + ChatColor.YELLOW + nextPunishment.getType().toString() + ": " + nextPunishment.getTemplate());
                 } else {
-                    messages.add("Next Punishment: &4Error - No Template found");
+                    messages.add(ChatColor.RED + "Next Punishment: Error - No Template found");
                 }
                 messages.add("");
 
@@ -101,7 +112,7 @@ public class TemplateStackCommand extends BaseCommand {
                 });
             });
         } else {
-            Chat.msg(sender, "&cTemplateStack &e" + templateStack + " does not exist");
+            Chat.msg(sender, ChatColor.RED + "TemplateStack " + ChatColor.YELLOW + templateStack + ChatColor.RED + " does not exist");
         }
         Chat.msg(sender, "");
     }
@@ -112,9 +123,10 @@ public class TemplateStackCommand extends BaseCommand {
     public void onReload(CommandSender sender) {
         this.plugin.reloadPlugin();
         if (this.plugin.getLiteBansManager().getConfig().isValid()) {
-            Chat.msg(sender, "&aConfiguration successfully reloaded");
+
+            Chat.msg(sender, ChatColor.GREEN + "Configuration successfully reloaded");
         } else {
-            Chat.msg(sender, "&cConfiguration invalid. Check logs, fix and reload again.");
+            Chat.msg(sender, ChatColor.RED + "Configuration invalid. Check logs, fix and reload again.");
         }
     }
 }

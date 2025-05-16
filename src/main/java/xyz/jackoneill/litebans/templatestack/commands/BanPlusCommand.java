@@ -3,6 +3,7 @@ package xyz.jackoneill.litebans.templatestack.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -43,16 +44,20 @@ public class BanPlusCommand extends BaseCommand {
                         } else {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandToExecute);
                         }
-                        messages.add("&cSuccessfully " + nextPunishment.getType().getPastTense() + " &e" + player.getName() + "&f (" + nextPunishment.getTemplate() + ")");
+                        messages.add(ChatColor.GREEN + "Successfully " + nextPunishment.getType().getPastTense() + " &e" + player.getName() + "&f (" + nextPunishment.getTemplate() + ")");
                     } else {
                         Log.error("Could not find a suitable punishment template for " + player.getName() + " and Template " + stack.getName());
-                        messages.add("&4Error: Could not find a suitable punishment template for &e" + player.getName() + " &4 and Template &e" + stack.getName());
+                        messages.add(ChatColor.RED + "Error: Could not find a suitable punishment template for "
+                                + ChatColor.YELLOW + player.getName()
+                                + ChatColor.RED + " and Template " + ChatColor.YELLOW + stack.getName());
                     }
                     Chat.msg(sender, messages.toArray(new String[0]));
                 });
             });
         } else {
-            Chat.msg(sender, "&cTemplateStack &e" + templateStack + " does not exist");
+            Chat.msg(sender, ChatColor.RED + "TemplateStack "
+                    + ChatColor.YELLOW + templateStack
+                    + ChatColor.RED + " does not exist");
         }
         Chat.msg(sender, "");
     }
