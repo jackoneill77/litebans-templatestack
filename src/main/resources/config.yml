@@ -5,7 +5,7 @@ command_alias:
   - kickplus
   - warnplus
 defaults:
-  expiration_days: 30
+  expiration_days: 90
   punishments: 1
 template_stacks:
   Spam:

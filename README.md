@@ -1,17 +1,27 @@
 # LiteBans-TemplateStack
 
-**LiteBans-TemplateStack** is an extension to the [LiteBans](https://www.spigotmc.org/resources/litebans.3715/) plugin made by Ruan. It allows combining ladder templates from multiple punishment types (ban, mute, kick, warn) into one simple template.
+**LiteBans-TemplateStack** is an extension to the [LiteBans](https://www.spigotmc.org/resources/litebans.3715/) plugin made by Ruan. It allows combining ladder templates from multiple punishment types (ban, mute, kick, warn) into one simple template by using the LiteBans API.
 This allows using one single command to be used to issuing different punishments depending on where the player on the punishment ladder is.
 
 A **TemplateStack** is defined as a group of _at least_ one punishment template. Templates of all four types (warn, kick, mute, ban) can be combined. 
+
+*Note:* How a punishment looks like and which permissions are required to execute it will be handled by LiteBans itself, the TemplateStack-plugin does not overwrite that behaviour!
+
+## Requirements
+
+* This plugin required LiteBans to be installed. Get it on [spigotmc.org](https://www.spigotmc.org/resources/litebans.3715/).
+* This plugin was tested with 
+  * Minecraft `1.20.4` (should also work with newer versions)
+  * LiteBans `2.16.4`
+
 
 ## Configuration
 
 | Key                        | Description                                                                                                                 | required | default if not set         | 
 |----------------------------|-----------------------------------------------------------------------------------------------------------------------------|----------|----------------------------|
 | `debug`                    | enables detailed logging output in console, default=false                                                                   | no       | `false`                    |
-| `command_alias`            | list of command aliases used for the punish-command                                                                         | no       | `['banmutekickwarn']`      |
-| `defaults.expiration_days` | default value for the number of days until a punishment expires and <br/>is not considered for ladder progression anymore * | no       | `30`                       |
+| `command_alias`            | list of command aliases used for the punish-command                                                                         | no       | `['banplus']`              |
+| `defaults.expiration_days` | default value for the number of days until a punishment expires and <br/>is not considered for ladder progression anymore * | no       | `90`                       |
 | `defaults.punishments`     | default value for the number of punishments in a ladder type *                                                              | no       | `1`                        |
 | `template_stacks.<key>`    | name of the template stack - will be used for command auto-completion                                                       | yes      | -                          |
 | __ `<key>.enabled`         | boolean flag, if false, template stack will not be loaded                                                                   | no       | `true`                     |
@@ -25,6 +35,21 @@ A **TemplateStack** is defined as a group of _at least_ one punishment template.
 \* default values will be used if the attribute is not set in the template stack.
 
 \*\* order of templates is fixed and always `warn -> kick -> mute -> ban`.  
+
+## Commands
+
+Admin / Debugging Commands:
+* `/templatestack reload`: Reloads configuration files from disk
+* `/templatestack list`: Lists all loaded TemplateStacks
+* `/templatestack info <template>`: Shows details of a TemplateStack
+* `/templatestack check <player> <template>`: Checks where the player in the punishment ladder is and displays that information
+
+
+Punishments:
+* `/banplus <player> <template>`: Adds a new punishment through litebans to the player. This command just checks which type (`ban|kick|mute|warn`) has to be used and then executes the corresponding LiteBans command for the CommandSender. 
+* `/muteplus`, `/kickplus`, `/warnplus`: Alias for `/banplus` (same functionality)
+
+Command Aliases for the punishment command can be configured in `config.yml`.
 
 ## Example Use-Case
 
@@ -111,7 +136,7 @@ mute-templates:
         duration: 2h
       first:
         duration: 1h
-    expire_ladder: 30d
+    expire_ladder: 90d
     ip_template: false
     
 warn-templates:
@@ -124,7 +149,7 @@ warn-templates:
         message: '&4You should really stop. &eThis warn should not happen.. '
       first:
         message: '&cPlease stop spamming!\nThis is your first and only warning. If you do this again, you will be muted.'
-    expire_ladder: 30d
+    expire_ladder: 90d
     ip_template: false
     
 kick-templates:
@@ -137,8 +162,7 @@ kick-templates:
         message: '&4You should really stop.'
       first:
         message: '&cPlease stop spamming!\nIf you do this again, you will be muted.'
-    expire_ladder: 30d
+    expire_ladder: 90d
     ip_template: false
 
 ```
-

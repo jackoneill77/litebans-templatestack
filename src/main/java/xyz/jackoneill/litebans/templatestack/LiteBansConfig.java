@@ -75,7 +75,7 @@ public class LiteBansConfig {
 
     private void loadTemplateStackConfiguration() {
         ConfigurationSection allStacksConfig = this.plugin.getConfig().getConfigurationSection("template_stacks");
-        final int defaultExpirationDays = this.plugin.getConfig().getInt("defaults.expiration_days", 30);
+        final int defaultExpirationDays = this.plugin.getConfig().getInt("defaults.expiration_days", 90);
         final int defaultPunishments = this.plugin.getConfig().getInt("defaults.punishments", 1);
 
         if (allStacksConfig == null) {

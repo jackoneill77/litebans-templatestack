@@ -99,6 +99,9 @@ public final class TemplateStackPlugin extends JavaPlugin {
         List<String> banPlusCommands = getConfig().getStringList("command_alias");
         if (banPlusCommands.isEmpty()) {
             banPlusCommands.add("banplus");
+            banPlusCommands.add("muteplus");
+            banPlusCommands.add("kickplus");
+            banPlusCommands.add("warnplus");
         }
         List<String> templateStackCommands = List.of("templatestack");
 
