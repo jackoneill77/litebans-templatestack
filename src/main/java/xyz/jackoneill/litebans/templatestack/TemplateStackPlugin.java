@@ -10,6 +10,7 @@ import xyz.jackoneill.litebans.templatestack.commands.BanPlusCommand;
 import xyz.jackoneill.litebans.templatestack.commands.TemplateStackCommand;
 import xyz.jackoneill.litebans.templatestack.model.TemplateStack;
 import xyz.jackoneill.litebans.templatestack.util.Log;
+import xyz.jackoneill.litebans.templatestack.util.Metrics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,8 @@ public final class TemplateStackPlugin extends JavaPlugin {
         this.loadLiteBansConfigAndLogResults();
         this.registerCommands();
 
+        final int pluginId = 25875;
+        Metrics metrics = new Metrics(this, pluginId);
         Log.info("initialized");
     }
 
