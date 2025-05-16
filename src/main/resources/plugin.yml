@@ -7,3 +7,14 @@ website: https://jackoneill.xyz
 
 softdepend:
   - LiteBans
+
+permissions:
+  litebans.templatestack:
+    description: permission for using the administrative commands of templatestack
+    default: op
+  litebans.templatestack.punish:
+    description: permission for executing punishment command
+    default: op
+  litebans.templatestack.reload:
+    description: permission to reload configuration of templatestack
+    default: op

@@ -15,6 +15,7 @@ import xyz.jackoneill.litebans.templatestack.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+@CommandPermission("litebans.templatestack.punish")
 @CommandAlias("%banPlusAlias")
 public class BanPlusCommand extends BaseCommand {
 
@@ -25,6 +26,7 @@ public class BanPlusCommand extends BaseCommand {
     }
 
     @Default()
+    @CommandPermission("litebans.templatestack.punish")
     @Description("Executes a punishment based on current position of templatestack ladder")
     @CommandCompletion("@offlineplayers @stacks")
     public void onExecute(CommandSender sender, @Name("player") OfflinePlayer player, @Name("template") String templateStack) {

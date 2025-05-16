@@ -51,6 +51,14 @@ Punishments:
 
 Command Aliases for the punishment command can be configured in `config.yml`.
 
+## Permissions
+
+| Permission                      | Description                                  | Default |
+|---------------------------------|----------------------------------------------|---------|
+| `litebans.templatestack`        | permission for administrative commands       | op      |
+| `litebans.templatestack.punish` | permission for executing punishment commands | op      |
+| `litebans.templatestack.reload` | permission for reload configuration command  | op      |
+
 ## Example Use-Case
 
 Let's assume, you want to have a punishment for Spam, that does the following:
