@@ -92,7 +92,7 @@ public class LiteBansConfig {
                 continue;
             }
 
-            if (!templateStackConfig.contains("templates")) {
+            if (!templateStackConfig.contains("ladder")) {
                 Log.warning("TemplateStack " + currentStackName + " has no stacks defined - ignoring");
                 continue;
             }
