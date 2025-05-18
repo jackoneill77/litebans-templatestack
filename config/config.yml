@@ -11,7 +11,7 @@ template_stacks:
   Spam:
     enabled: true
     expiration_days: 90
-    templates:
+    ladder:
       ban:
         template: 'Spam'
         enabled: true
@@ -28,7 +28,7 @@ template_stacks:
         enabled: true
         punishments: 1
   KickBan:
-    templates:
+    ladder:
       ban:
         template: 'KickBan'
         enabled: true

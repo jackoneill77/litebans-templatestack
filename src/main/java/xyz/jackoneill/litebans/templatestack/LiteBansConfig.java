@@ -100,7 +100,7 @@ public class LiteBansConfig {
             int expirationDays = templateStackConfig.getInt("expiration_days", defaultExpirationDays);
             TemplateStack stack = new TemplateStack(currentStackName, expirationDays);
 
-            ConfigurationSection templatesConfig = templateStackConfig.getConfigurationSection("templates");
+            ConfigurationSection templatesConfig = templateStackConfig.getConfigurationSection("ladder");
             stack.setBanTemplate(this.getTemplate(TemplateType.BAN, templatesConfig, defaultPunishments, currentStackName));
             stack.setMuteTemplate(this.getTemplate(TemplateType.MUTE, templatesConfig, defaultPunishments, currentStackName));
             stack.setKickTemplate(this.getTemplate(TemplateType.KICK, templatesConfig, defaultPunishments, currentStackName));
